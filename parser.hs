@@ -9,6 +9,7 @@ links: https://stackoverflow.com/questions/8463642/implement-gauss-jordan-elimin
 module Main where
 
 import Helpers 
+import Data.List (nub)
 
 rowSplitter = '|'
 colomnSplitter = ','
@@ -36,7 +37,11 @@ rowParser string = map (stringToNumber) $ splitOn colomnSplitter string
 matrixParser :: String -> Matrix
 matrixParser string = map (rowParser) $ splitOn rowSplitter string
 
-finalMatrixParser:: String -> Matrix
-finalMatrixParser string = matrixParser $ (filter (/=whiteSpace) string)
+isValid :: Matrix -> Bool
+isValid = (==1) . length . nub . map length
+
+finalMatrixParser:: String -> Maybe Matrix
+finalMatrixParser = ensure isValid . matrixParser . filter (/=whiteSpace)
 
 stdinTest = (finalMatrixParser <$> getLine) >>= print
+main = stdinTest
