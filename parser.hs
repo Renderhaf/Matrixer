@@ -6,17 +6,15 @@
 links: https://stackoverflow.com/questions/8463642/implement-gauss-jordan-elimination-in-haskell
 -}
 
-module Main where
+module Parser where
 
 import Helpers 
+import Types
 import Data.List (nub)
 
 rowSplitter = '|'
 colomnSplitter = ','
 whiteSpace = ' '
-
-type MatrixNumber = Double
-type Matrix = [[MatrixNumber]]
 
 {-
 Matrix example: "1, 2, 3 | 4, 5, 6 | 7, 8, 9"
@@ -26,11 +24,11 @@ Is the matrix:
                         7 8 9
 -}
 
--- Gets a string of a nubmer, returns that number
+-- | Gets a string of a nubmer, returns that number
 stringToNumber :: String -> MatrixNumber
 stringToNumber string = read string
 
--- Gets comma seperated numbers, returns a list of numbers
+-- | Gets comma seperated numbers, returns a list of numbers
 rowParser :: String -> [MatrixNumber]
 rowParser string = map (stringToNumber) $ splitOn colomnSplitter string
 
@@ -43,5 +41,5 @@ isValid = (==1) . length . nub . map length
 finalMatrixParser:: String -> Maybe Matrix
 finalMatrixParser = ensure isValid . matrixParser . filter (/=whiteSpace)
 
-stdinTest = (finalMatrixParser <$> getLine) >>= print
-main = stdinTest
+stdinParser :: IO (Maybe Matrix)
+stdinParser = finalMatrixParser <$> getLine

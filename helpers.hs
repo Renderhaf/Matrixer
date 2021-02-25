@@ -13,3 +13,6 @@ splitOn delim lst = case delim `elemIndex` lst of
 ensure :: (a -> Bool) -> a -> Maybe a
 ensure p v | p v       = Just v
            | otherwise = Nothing
+
+(<$$>) :: (Functor f1, Functor f2) => (a -> b) -> f1 (f2 a) -> f1 (f2 b)
+(<$$>) = (<$>) . (<$>)
